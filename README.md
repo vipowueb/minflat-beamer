@@ -4,6 +4,7 @@ The minflat theme is a Beamer theme in modern flat design, i.e. emphasising a mi
 
 Just have a look at the [demo slides][]. Here a little apéritif:
 
+![Sample](http://robert.tractatus.info/minflat/aperitif.jpg)
 
 ## Installation
 
