@@ -2,7 +2,7 @@
 
 The minflat theme is a Beamer theme in modern flat design, i.e. emphasising a minimal yet functional design, primarily designed for mathematical talks. You can choose between two color schemes. A blue violet and a red purple variant. Corresponding colours used are green for the progress bar (and examples) and orange for alert elements.
 
-Just have a look at the [demo slides][]. Here a little apÈritif:
+Just have a look at the [demo slides][]. Here a little apéritif:
 
 
 ## Installation
