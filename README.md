@@ -2,21 +2,17 @@
 
 The minflat theme is a Beamer theme in modern flat design, i.e. emphasising a minimal yet functional design, primarily designed for mathematical talks. You can choose between two color schemes. A blue violet and a red purple variant. Corresponding colours used are green for the progress bar (and examples) and orange for alert elements.
 
-Just have a look at the [demo slides][]. Here a little apéritif:
+Just have a look at the [demo slides][]. Here is a little apéritif:
 
 ![Sample](http://robert.tractatus.info/minflat/aperitif.jpg)
 
 ## Installation
 
-1. **Download the source** with a `git clone` of the [minflat repository](https://https://github.com/vipowueb/minflat-beamer) or as a [zip archive]() of the latest version.
+1. **Download** via a `git clone` the [minflat repository](https://github.com/vipowueb/minflat-beamer) or as a [zip archive](https://github.com/vipowueb/minflat-beamer/archive/master.zip) of the latest version.
 
-2. **Move the resulting `*.sty` files** to the folder containing your
-   presentation. To use minflat with many presentations, move the `*.sty` 
-   files to a folder texlive/texmf-local/tex/latex in your TeX path instead (might require
-   `sudo` rights).
+2. **Move the `*.sty` files** to the folder containing your presentation. To use minflat with globally, move the `*.sty` files to a folder /path/to/texlive/texmf-local/tex/latex in your TeX path instead (might require `sudo` rights).
 
-4. **Use the theme for your presentation** by declaring `\usetheme{minflat}` in
-    the preamble of your Beamer document. Please note the options in the demo files.
+4. **Use the theme for your presentation** by declaring `\usetheme{minflat}` in the preamble of your Beamer document. Please note the options in the manual.
 
 
 ## Usage
