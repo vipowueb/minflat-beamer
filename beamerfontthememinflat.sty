@@ -1,0 +1,28 @@
+% ----------------------------------------------------------------------------- %
+% Copyright 2016-2017 Robert Baumgarth The project is hosted on					%
+%																				%
+%     			https://github.com/vipowueb/minflat-beamer						%
+%																				%
+% 	Version: 	1.0																%
+%	Mail: 		robert@tractatus.info											%
+%	Website:		http://math.uni.lu/~baumgarth/, 								%
+%				http://robert.tractatus.info									%
+%																				%
+% This work is licensed under a Creative Commons Attribution-ShareAlike 4.0		%
+% International License (https://creativecommons.org/licenses/by-sa/4.0/).		%
+% ----------------------------------------------------------------------------- %
+\ProvidesPackage{beamerfontthememinflat}
+
+\usepackage[protrusion=true]{microtype}
+\usepackage{polyglossia}
+\setdefaultlanguage{german}
+
+\usefonttheme{professionalfonts}
+\usepackage{fontspec,unicode-math}
+\setsansfont[Scale=.75,Ligatures={TeX},BoldFont={Museo Sans-500}]{Museo Sans-300}
+\setmathfont[StylisticSet=8,Scale=.7,vargreek-shape=unicode]{Asana Math}%XITS Math}
+%\setmathfont[StylisticSet=8,Scale=.8,vargreek-shape=unicode]{XITS Math}
+\setmathfont[Scale=.7,range={\leq,\leqslant,\geq,\geqslant,\in,\notin,\subset,\subseteq,\subsetneq,\supset,\supseteq,\supsetneq,\subsetfin,\subsetcirc,\times,\otimes,\smwhtdiamond,\lhd,\rhd}]{XITS Math}
+\setmathfont[Scale=.8,range={\mathbb}]{XITS Math}
+\setmathfont[Scale=.8,range={\sum,\mathcal,\mathbfcal,\ell,\int}]{Neo Euler}
+\renewcommand\mathcal\mathscr

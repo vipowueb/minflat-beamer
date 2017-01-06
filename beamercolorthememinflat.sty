@@ -1,0 +1,82 @@
+% ----------------------------------------------------------------------------- %
+% Copyright 2016-2017 Robert Baumgarth The project is hosted on					%
+%																				%
+%     			https://github.com/vipowueb/minflat-beamer						%
+%																				%
+% 	Version: 	1.0																%
+%	Mail: 		robert@tractatus.info											%
+%	Website:		http://math.uni.lu/~baumgarth/, 								%
+%				http://robert.tractatus.info									%
+%																				%
+% This work is licensed under a Creative Commons Attribution-ShareAlike 4.0		%
+% International License (https://creativecommons.org/licenses/by-sa/4.0/).		%
+% ----------------------------------------------------------------------------- %
+\ProvidesPackage{beamercolorthememinflat}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%	OPTIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newif\if@beamer@theme@purple
+\@beamer@theme@purplefalse
+\DeclareOptionBeamer{purple}{\@beamer@theme@purpletrue}
+
+\ProcessOptionsBeamer
+
+
+\if@beamer@theme@purple
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%% define customary color theme
+	%%% (red)purple
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\definecolor{darkpurple}{RGB}{137,57,94}
+	\definecolor{beamergreen}{RGB}{57,137,100}
+	\definecolor{beamerorange}{RGB}{255,175,0}
+\else
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%% define customary color theme
+	%%% blue-violet
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\definecolor{darkpurple}{RGB}{76,61,122}%100,0,152}
+	\definecolor{beamergreen}{RGB}{61,122,76}
+	\definecolor{beamerorange}{RGB}{255,175,0}
+\fi
+
+
+\definecolor{progressbar green}{RGB}{150,198,23}
+
+\setbeamercolor{normal text}{fg=black!95!white}
+\setbeamercolor{alerted text}{fg=beamerorange}
+\setbeamercolor{example text}{fg=beamergreen}
+
+\definecolor{section head color}{RGB}{255,255,255}
+\setbeamercolor*{titlelike}{fg=darkpurple}
+\setbeamercolor*{frametitle}{fg=normal text.fg}
+\setbeamercolor{subtitle}{fg=normal text.fg}
+
+\setbeamercolor{structure}{fg=darkpurple}
+\setbeamercolor*{palette primary}{use=structure,fg=white,bg=structure.fg}
+\setbeamercolor*{palette secondary}{use=structure,fg=white,bg=structure.fg!85!black}
+\setbeamercolor*{palette tertiary}{use=structure,fg=white,bg=structure.fg!50!black}
+\setbeamercolor*{palette quaternary}{fg=white,bg=black}
+
+\definecolor{nocolor}{RGB}{255,255,255}
+\definecolor{lowOpacity}{RGB}{110,110,110}
+%\setbeamercolor{section in head/foot}{fg=white,bg=black}
+%\setbeamertemplate{section in head/foot shaded}{\colorbox{blue}{\usebeamertemplate{section in head/foot}}} 
+
+\setbeamercolor{block title}{use=structure,fg=white,bg=structure.fg!85!black}
+\setbeamercolor{block body}{parent=normal text,use=block title,bg=block title.bg!10!bg}
+%\setbeamercolor{block body}{bg=normal text.bg!90!black}
+
+\setbeamercolor{block title alerted}{use=alerted text,fg=white,bg=alerted text.fg}%!85!black}
+\setbeamercolor{block body alerted}{parent=normal text,use=block title alerted,bg=block title alerted.bg!10!bg}
+
+\setbeamercolor{block title example}{use=example text,fg=white,bg=example text.fg!85!black}
+\setbeamercolor{block body example}{parent=normal text,use=block title example,bg=block title example.bg!10!bg}
+
+\setbeamercolor{progress bar}{bg=white}
+\setbeamercolor{progress bar progress}{use=progress bar,bg=progressbar green}
+\setbeamercolor{purple bar}{use=structure,bg=structure.fg}
+
+
+\mode<all>

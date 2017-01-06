@@ -1,0 +1,390 @@
+% ----------------------------------------------------------------------------- %
+% Copyright 2016-2017 Robert Baumgarth The project is hosted on					%
+%																				%
+%     			https://github.com/vipowueb/minflat-beamer						%
+%																				%
+% 	Version: 	1.0																%
+%	Mail: 		robert@tractatus.info											%
+%	Website:		http://math.uni.lu/~baumgarth/, 								%
+%				http://robert.tractatus.info									%
+%																				%
+% This work is licensed under a Creative Commons Attribution-ShareAlike 4.0		%
+% International License (https://creativecommons.org/licenses/by-sa/4.0/).		%
+% ----------------------------------------------------------------------------- %
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerthememinflat}[2015/11/17 Minimal Flat Design Beamer Theme]
+
+\usefonttheme{minflat}
+\usecolortheme{minflat}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%	OPTIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newif\ifbeamer@nofooter
+\beamer@nofooterfalse
+\DeclareOptionBeamer{nofooter}{\beamer@nofootertrue}
+
+\ProcessOptionsBeamer
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mode<presentation>
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\beamersetuncovermixins{\opaqueness<1>{20}}{\opaqueness<2->{15}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%	load packages, format date
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\RequirePackage{tikz}
+\RequirePackage[en-GB]{datetime2}
+\DTMlangsetup[en-GB]{ord=raise,monthyearsep={,\space}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%	set beamer template elements
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setbeamertemplate{sections/subsections in toc}[circle]
+
+\setbeamertemplate{itemize item}{$\bigcirc$}
+\setbeamertemplate{itemize subitem}{$\circ$}
+\setbeamertemplate{itemize subsubitem}{$\circ$}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%	define title page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\titlepage{\usebeamertemplate{title page}}
+\setbeamertemplate{title page}{
+	\begin{minipage}[b][\paperheight]{\textwidth}
+		\flushleft
+    	\vfill
+
+    	\ifx\insertinstitut\@empty%
+    	\else{%
+		    \vspace*{-6em}
+    		\usebeamerfont{institute}%
+    		\usebeamercolor[fg]{institute}%
+    		\insertinstitute \par
+    		\vspace*{6em}
+    	}%
+    	\fi%
+
+    	\ifx\insertsubtitle\@empty%
+    	\else{%
+    		\usebeamerfont{subtitle}%
+    		\usebeamercolor[fg]{subtitle}%
+    		\insertsubtitle \par
+    	}%
+    	\vspace*{.5em}
+    	\fi%
+
+    	\ifx\inserttitle\@empty%
+    	\else{%
+    		\usebeamerfont{title}%
+    		\usebeamercolor[fg]{title}% 
+    		\bfseries \inserttitle \par
+    	}%
+    	\vspace*{.5em}
+    	\fi%
+    	    	
+    	\begin{tikzpicture}
+    		\draw[beamergreen] (0, 0) -- (\textwidth, 0);
+    	\end{tikzpicture}%
+    	\vspace*{1em}
+    	
+    	\ifx\insertauthor\@empty%
+    	\else{%
+    		\usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor \par
+    	}%
+    	\vspace*{.5em}
+    	\fi%
+
+    	\ifx\insertdate\@empty%
+    	\else{%
+    		\usebeamerfont{date}
+    		\usebeamercolor[fg]{date}
+    		\insertdate\par}%
+    	\fi%
+
+    	\vfill
+    	\vspace*{5mm}
+    \end{minipage}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%	define thank you page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\let\origaddtocontents=\addtocontents
+\def\dontaddtocontents#1#2{}
+
+\newcommand\sectionNotInTocAndNavigation[1]{
+	\let\addtocontents=\dontaddtocontents
+	\section{#1}
+	\let\addtocontents=\origaddtocontents
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%	define overlays
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcounter{sectionsCounter}
+\AtBeginSection[]{ %%% Use \AtBeginSection[]{ to ignore \section*
+    \stepcounter{sectionsCounter}
+    \begingroup
+        \setbeamercolor{background canvas}{parent=palette primary}
+
+        \begin{frame}[plain,c]\label{sec-\thesectionsCounter}
+            \usebeamerfont{section title}
+            \begin{minipage}{.8\paperwidth}
+				\color{section head color}
+				\insertsection\\[1ex] %% = section name in section{}, \insertsectionhead = section[...]{} if set
+    			\progressbar{.25ex}
+    		\end{minipage}
+    	\end{frame}
+    \endgroup
+}
+
+\AtBeginSubsection{
+    \begingroup
+        \setbeamercolor{background canvas}{parent=palette primary}
+
+        \begin{frame}[plain,c]
+            \usebeamerfont{section title}
+            \begin{minipage}{.8\paperwidth}
+				\color{section head color}
+				\insertsubsection\\[1ex]
+    			\progressbar{.25ex}
+    		\end{minipage}
+    	\end{frame}
+    \endgroup
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%	set counter for progress bar
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\AtEndDocument{%
+	\makeatletter
+    \def\sp{ }%
+    \immediate\write\@mainaux{%
+      \string\expandafter\string\ifx%
+        \string\csname\sp c@schroedinger\string\endcsname\string\relax%
+      \string\newcounter{\string schroedinger}%
+      \string\fi%
+      \string\setcounter{\string schroedinger}{\number\value{sectionsCounter}}%
+    }%
+}
+
+
+\newcommand\progressbar[1]{%
+	\dimen0=\textwidth
+    \multiply\dimen0 by \insertframenumber
+    \divide\dimen0 by \inserttotalframenumber
+    \edef\progressbarwidth{\the\dimen0}
+    \leavevmode%
+	\begin{beamercolorbox}[wd=\textwidth,ht=#1,dp=#1]{progress bar}
+    	\begin{beamercolorbox}[wd=\progressbarwidth,ht=#1,dp=#1]{progress bar progress}
+	    \end{beamercolorbox}%
+	\end{beamercolorbox}%
+}
+
+\DeclareRobustCommand\calcProgressbar[3]{%
+	\dimen1=\textwidth
+	\multiply\dimen1 by #1%\insertframenumber
+	\divide\dimen1 by #2%\inserttotalframenumber
+	\advance \dimen1 by #3%-20pt
+	\the\dimen1
+%	\calcProgressbar{\the\frameNumber}{\the\totalFrameNumberWithoutThx}{20pt}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%	define progress bar header
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcounter{progressBarCounter}
+\defbeamertemplate*{headline}{flat header}{%
+	\vspace*{.5em}
+	
+	\newcount\totalFrameNumberWithoutThx
+	\totalFrameNumberWithoutThx=\inserttotalframenumber
+	\advance \totalFrameNumberWithoutThx by -1
+	
+    \def\tmp@valx{\value{schroedinger}}%
+		\ifnum\tmp@valx=-1%
+    	$??$%
+  	\else%
+		\setcounter{progressBarCounter}{1}\relax\loop\ifnum\theprogressBarCounter<\theschroedinger%
+			\def\getSectionLabel{sec-\theprogressBarCounter}
+			\newcount\frameNumber
+			\frameNumber=\getrefnumber{\getSectionLabel}%\getpagerefnumber{\getSectionLabel}
+			\advance \frameNumber by 1
+			\dimen1=\textwidth
+			\multiply\dimen1 by \frameNumber
+			\divide\dimen1 by \totalFrameNumberWithoutThx
+			\advance \dimen1 by -20pt
+			\edef\labelAlignmentWidth{\the\dimen1}
+			\expandafter\edef\csname sectionWidth\the\value{progressBarCounter}\endcsname{\labelAlignmentWidth}
+			\expandafter\edef\csname sectionTitle\the\value{progressBarCounter}\endcsname{\getSectionLabel}
+			\stepcounter{progressBarCounter}\relax\repeat%
+	    \leavevmode%  
+
+		\dimen0=\textwidth
+	    \multiply\dimen0 by \insertframenumber
+	    \divide\dimen0 by \totalFrameNumberWithoutThx
+	    	\advance\dimen0 by -20pt
+	    \edef\slidesProgressbarWidth{\the\dimen0}
+			
+		\begin{tikzpicture}[every node/.style={black!50!white,\labelAlignmentHelper,yshift=-4pt}]
+			\draw[progressbar green] (0,0) -- (\slidesProgressbarWidth,0);
+			
+			\advance \value{schroedinger} by -1
+			\foreach \i in {1,...,\theschroedinger} {
+				\ifdim\csname sectionWidth\i \endcsname>345pt
+					\def\labelAlignmentHelper{below left}
+				\else
+					\def\labelAlignmentHelper{below}
+				\fi
+			
+				\ifnum\the\c@section=\i
+					\draw[draw=white,fill=progressbar green,thick] (\csname sectionWidth\i \endcsname,0) circle [radius=4pt];
+					\draw (\csname sectionWidth\i \endcsname,0) node[fill=white,font=\bfseries]{ \ \hyperlink{sec-\i}{\nameref{\csname sectionTitle\i \endcsname}} };
+				\else
+					\draw[draw=progressbar green,fill=white] (\csname sectionWidth\i \endcsname,0) circle [radius=3pt];
+					\draw (\csname sectionWidth\i \endcsname,0) node[]{ \ \hyperlink{sec-\i}{\nameref{\csname sectionTitle\i \endcsname}} };			
+				\fi
+			};
+		\end{tikzpicture}
+	\fi
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%	cut beamer symbols, define footer
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\beamertemplatenavigationsymbolsempty
+
+\defbeamertemplate*{footline}{flat footer}{
+	\ifbeamer@nofooter\relax
+	\else
+		\hbox{%
+			\begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm,rightskip=.3cm]{nocolor}%{author in head/foot}%
+				\color{lowOpacity}\hspace*{1.5em}\insertshortauthor
+			\end{beamercolorbox}%
+			\begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm,rightskip=.3cm]{nocolor}%{title in head/foot}%
+				\color{lowOpacity}\hfill \insertframenumber\, \,(\inserttotalframenumber)\hspace*{1.5em}%
+			\end{beamercolorbox}%
+		}%
+		\vskip1ex%
+	\fi
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%	define image frame
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newenvironment{blankframe}{
+    \setbeamertemplate{headline}{}
+    \addtobeamertemplate{frametitle}{\vspace*{-0.9\baselineskip}}{}
+    \setbeamertemplate{footline}{}
+}{}
+
+\newcommand\imageFrame[1]{%
+	\begin{blankframe}
+		\begin{frame}
+			\begin{tikzpicture}[remember picture,overlay]
+	            \node[at=(current page.center)] {
+	                \includegraphics[width=\paperwidth]{#1}
+	            };
+	        \end{tikzpicture}
+		\end{frame}
+	\end{blankframe}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%	define image frames with overlay
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\imageFrameOverlay[5]{%
+	\ifcase\pdfstrcmp{#5}{left}
+		\def\xShift{}
+		\def\anchorShift{west}
+	\fi
+	\ifcase\pdfstrcmp{#5}{right}
+		\def\xShift{-}
+		\def\anchorShift{east}
+	\fi
+	
+	\begin{blankframe}
+		\begin{frame}
+			\begin{tikzpicture}[remember picture,overlay,headNfoot/.style={section head color,text width=#1, align=center, xshift=\xShift#1/2}]
+	            \node[at=(current page.center)] {
+	                \includegraphics[width=\paperwidth]{#2}
+	            };
+	            \draw [draw=none,fill=darkpurple,opacity=.8] (current page.north \anchorShift) rectangle ([xshift=\xShift#1]current page.south \anchorShift);
+	            \node[headNfoot] at ([yshift=-#1/3]current page.north \anchorShift) {\fontsize{26pt}{30pt}\selectfont\hyphenchar\font=-1 #3\par};
+	            \node[headNfoot] at ([yshift=#1/3]current page.south \anchorShift) {\bfseries\fontsize{26pt}{30pt}\selectfont\hyphenchar\font=-1 #4\par};
+	        \end{tikzpicture}
+		\end{frame}
+	\end{blankframe}
+}
+
+\newcommand\imageFrameOverlayLeft[4][125pt]{%
+	\imageFrameOverlay{#1}{#2}{#3}{#4}{left}
+}
+
+\newcommand\imageFrameOverlayRight[4][125pt]{%
+	\imageFrameOverlay{#1}{#2}{#3}{#4}{right}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%	define highlighted frame
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\highlightedFrame[2][]{%
+	\ifx#1\empty
+		\def\highlightText{#1}
+		\def\highlightSubText{}
+	\else 
+		\def\highlightText{#2}
+		\def\highlightSubText{#1}
+	\fi 
+	
+    \begingroup
+        \setbeamercolor{background canvas}{parent=palette primary}
+
+        \begin{frame}[plain,c]
+            \usebeamerfont{section title}
+			\begin{tikzpicture}[remember picture,overlay]
+	            \node[at=(current page.center),text width=\textwidth,align=center] {
+					\color{section head color}
+	                \bfseries\fontsize{48pt}{30pt}\selectfont\hyphenchar\font=-1 \highlightText\par
+	                
+	                \bfseries\fontsize{18pt}{30pt}\selectfont\hyphenchar\font=-1 \highlightSubText\par
+	            };
+	        \end{tikzpicture}
+    	\end{frame}
+    \endgroup
+}
+
+\newcommand{\milestones}[1]{%
+	
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%	redefine frame title
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setbeamertemplate{frametitle}
+{
+\vspace*{1em}
+		\hspace*{-3pt}\color{darkpurple}{\insertframetitle}
+%    	\begin{beamercolorbox}[wd=.7\textwidth,ht=1pt]{purple bar}
+%	    \end{beamercolorbox}%
+}
+
+\mode
+<all>
+
+\linespread{.9}
